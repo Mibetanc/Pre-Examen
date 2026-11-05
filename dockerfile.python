@@ -1,0 +1,7 @@
+FROM python:3.10-slim
+
+WORKDIR /suma
+
+COPY punto2.py .
+
+CMD ["python" , "punto2.py"]

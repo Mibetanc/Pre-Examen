@@ -1,0 +1,43 @@
+services:
+  servicio_a:
+    image: python
+    ports:
+      - "5007:5006"
+    command: sh -c "pip install flask && python /app/app.py"
+    container_name: contenedor_python_parcial
+    volumes:
+      - .:/app
+
+  servicio_b:
+    image: php
+    container_name: contenedor_php_parcial
+    command: php /archivo/archivo.php
+    volumes:
+      - .:/archivo
+
+  servicio_c:
+    image: mysql:8
+    container_name: contenedor_mysql_parcial
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: mysql
+    volumes:
+      - ./datos_mysql:/var/lib/mysql
+    depends_on:
+      - servicio_d
+
+  servicio_d:
+    image: laravel
+    container_name: laravel
+    ports:
+      - "8080:80"
+    volumes:  
+      - .:/var/www/html
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: servicio_c
+      DB_PORT: 3306
+      DB_DATABASE: mysql
+      DB_USERNAME: root
+      DB_PASSWORD: secret
+
